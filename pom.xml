@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.cyclopsgroup</groupId>
+        <artifactId>cyclopsgroup-java-parent</artifactId>
+        <version>0.4</version>
+    </parent>
+    <artifactId>kaufman</artifactId>
+    <packaging>pom</packaging>
+    <name>Kaufman</name>
+    <version>1.0-SNAPSHOT</version>
+    <inceptionYear>2012</inceptionYear>
+    <scm>
+        <connection>scm:git:git@github.com:jiaqi/kaufman.git</connection>
+        <developerConnection>scm:git:git@github.com:jiaqi/kaufman.git</developerConnection>
+        <url>git@github.com:jiaqi/kaufman.git</url>
+    </scm>
+    <distributionManagement>
+        <site>
+            <id>cyclopsgroup.server.sourceforge</id>
+            <url>
+                s3://www.cyclopsgroup.org/projects/kaufman
+            </url>
+        </site>
+    </distributionManagement>
+    <modules>
+        <module>kaufman-aws</module>
+    </modules>
+</project>
