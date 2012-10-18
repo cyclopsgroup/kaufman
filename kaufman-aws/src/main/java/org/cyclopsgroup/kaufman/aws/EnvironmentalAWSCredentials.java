@@ -15,8 +15,10 @@ public class EnvironmentalAWSCredentials
 
     public EnvironmentalAWSCredentials( String idVariableName, String secretVariableName )
     {
-        this.accessKeyId = System.getenv( idVariableName );
-        this.secretKey = System.getenv( secretVariableName );
+        // Depend on the version of Tomcat, it seems Amazon BeanStalk passes environment variable in different ways.
+        // Such code captures environment variable no matter how BeanStalk passes it.
+        this.accessKeyId = System.getProperty( idVariableName, System.getenv( idVariableName ) );
+        this.secretKey = System.getProperty( secretVariableName, System.getenv( secretVariableName ) );
 
         if ( accessKeyId == null || secretKey == null )
         {
