@@ -20,13 +20,34 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
 public class JaxbTypeVerifier {
+	public static class Builder {
+		private Options options = new Options();
+
+		private Builder() {
+		}
+
+		public JaxbTypeVerifier toVerifier() {
+			return new JaxbTypeVerifier(options);
+		}
+
+		public Builder withRequireTrasnsient(boolean require) {
+			options.requireTransient = require;
+			return this;
+		}
+
+		public Builder withVerifyDataTimeAdapter(boolean verify) {
+			options.verifyDateTimeAdapter = verify;
+			return this;
+		}
+	}
+
 	private static class Options {
-		private boolean verifyEnumValue = true;
-		private boolean verifyEnum = true;
+		private boolean requireTransient = true;
+		private boolean verifyAttribute = true;
 		private boolean verifyClass = true;
 		private boolean verifyDateTimeAdapter = true;
-		private boolean verifyAttribute = true;
-		private boolean requireTransient = true;
+		private boolean verifyEnum = true;
+		private boolean verifyEnumValue = true;
 	}
 
 	private class Visitor implements PackageScanner.ClassVisitor {
@@ -56,11 +77,30 @@ public class JaxbTypeVerifier {
 		}
 	}
 
+	public static Builder newBuilder() {
+		return new Builder();
+	}
+
+	public static JaxbTypeVerifier newDefaultInstance() {
+		return new JaxbTypeVerifier(new Options());
+	}
+
+	private final Options options;
+
+	private JaxbTypeVerifier(Options options) {
+		this.options = options;
+	}
+
+	public void verifyPackage(String packageName) throws IOException {
+		PackageScanner.scanPackage(packageName, new Visitor());
+	}
+
 	private void verifyXmlElement(Class<?> elementType) {
 		try {
 			for (PropertyDescriptor prop : Introspector
 					.getBeanInfo(elementType).getPropertyDescriptors()) {
 				if (prop.getReadMethod() == null
+						|| prop.getName().equals("class")
 						|| prop.getReadMethod().isAnnotationPresent(
 								XmlTransient.class)) {
 					continue;
@@ -68,13 +108,14 @@ public class JaxbTypeVerifier {
 				if (prop.getReadMethod().isAnnotationPresent(XmlElement.class)
 						|| prop.getReadMethod().isAnnotationPresent(
 								XmlAttribute.class)) {
-					assertNotNull("Property " + prop + " in " + elementType
-							+ " is missing setter", prop.getWriteMethod());
+					assertNotNull("Property " + prop.getName() + " in "
+							+ elementType + " is missing setter",
+							prop.getWriteMethod());
 					continue;
 				}
 				if (options.requireTransient) {
 					fail("Getter of "
-							+ prop
+							+ prop.getName()
 							+ " in "
 							+ elementType
 							+ " is not annotated with XmlTrasient, XmlElement or XmlAttribute");
@@ -104,44 +145,5 @@ public class JaxbTypeVerifier {
 						+ value.value(), enu.name(), value.value());
 			}
 		}
-	}
-
-	private final Options options;
-
-	public static Builder newBuilder() {
-		return new Builder();
-	}
-
-	public static JaxbTypeVerifier newDefaultInstance() {
-		return new JaxbTypeVerifier(new Options());
-	}
-
-	public static class Builder {
-		private Options options = new Options();
-
-		private Builder() {
-		}
-
-		public Builder withVerifyDataTimeAdapter(boolean verify) {
-			options.verifyDateTimeAdapter = verify;
-			return this;
-		}
-
-		public Builder withRequireTrasnsient(boolean require) {
-			options.requireTransient = require;
-			return this;
-		}
-
-		public JaxbTypeVerifier toVerifier() {
-			return new JaxbTypeVerifier(options);
-		}
-	}
-
-	private JaxbTypeVerifier(Options options) {
-		this.options = options;
-	}
-
-	public void verifyPackage(String packageName) throws IOException {
-		PackageScanner.scanPackage(packageName, new Visitor());
 	}
 }
