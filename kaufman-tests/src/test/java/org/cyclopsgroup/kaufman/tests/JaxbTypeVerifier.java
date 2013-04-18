@@ -1,0 +1,147 @@
+package org.cyclopsgroup.kaufman.tests;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.EnumSet;
+
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+
+public class JaxbTypeVerifier {
+	private static class Options {
+		private boolean verifyEnumValue = true;
+		private boolean verifyEnum = true;
+		private boolean verifyClass = true;
+		private boolean verifyDateTimeAdapter = true;
+		private boolean verifyAttribute = true;
+		private boolean requireTransient = true;
+	}
+
+	private class Visitor implements PackageScanner.ClassVisitor {
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		@Override
+		public void visitClass(Class<?> type) {
+			if (type.isInterface() || type.isAnnotation()) {
+				return;
+			}
+			if (type.isEnum()) {
+				if (!options.verifyEnum
+						|| !type.isAnnotationPresent(XmlEnum.class)) {
+					return;
+				}
+				verifyXmlEnum((Class<? extends Enum>) type);
+				return;
+			}
+			if (type.isAnnotationPresent(XmlType.class)
+					|| type.isAnnotationPresent(XmlRootElement.class)) {
+
+				if (!options.verifyClass) {
+					return;
+				}
+				verifyXmlElement(type);
+				return;
+			}
+		}
+	}
+
+	private void verifyXmlElement(Class<?> elementType) {
+		try {
+			for (PropertyDescriptor prop : Introspector
+					.getBeanInfo(elementType).getPropertyDescriptors()) {
+				if (prop.getReadMethod() == null
+						|| prop.getReadMethod().isAnnotationPresent(
+								XmlTransient.class)) {
+					continue;
+				}
+				if (prop.getReadMethod().isAnnotationPresent(XmlElement.class)
+						|| prop.getReadMethod().isAnnotationPresent(
+								XmlAttribute.class)) {
+					assertNotNull("Property " + prop + " in " + elementType
+							+ " is missing setter", prop.getWriteMethod());
+					continue;
+				}
+				if (options.requireTransient) {
+					fail("Getter of "
+							+ prop
+							+ " in "
+							+ elementType
+							+ " is not annotated with XmlTrasient, XmlElement or XmlAttribute");
+				}
+			}
+		} catch (IntrospectionException e) {
+			throw new IllegalStateException("Can't introspect element "
+					+ elementType, e);
+		}
+	}
+
+	private <T extends Enum<T>> void verifyXmlEnum(Class<T> enumType) {
+		for (Enum<T> enu : EnumSet.allOf(enumType)) {
+			Field field;
+			try {
+				field = enumType.getField(enu.name());
+			} catch (NoSuchFieldException e) {
+				throw new IllegalStateException("Can't get field " + enu.name()
+						+ " of enum " + enumType, e);
+			}
+			XmlEnumValue value = field.getAnnotation(XmlEnumValue.class);
+			assertNotNull(enumType + "." + enu.name()
+					+ " is not annotated with " + XmlEnumValue.class, value);
+			if (options.verifyEnumValue) {
+				assertEquals("Enum " + enumType + "." + enu.name()
+						+ " is annotated with XmlEnumValue of wrong value() "
+						+ value.value(), enu.name(), value.value());
+			}
+		}
+	}
+
+	private final Options options;
+
+	public static Builder newBuilder() {
+		return new Builder();
+	}
+
+	public static JaxbTypeVerifier newDefaultInstance() {
+		return new JaxbTypeVerifier(new Options());
+	}
+
+	public static class Builder {
+		private Options options = new Options();
+
+		private Builder() {
+		}
+
+		public Builder withVerifyDataTimeAdapter(boolean verify) {
+			options.verifyDateTimeAdapter = verify;
+			return this;
+		}
+
+		public Builder withRequireTrasnsient(boolean require) {
+			options.requireTransient = require;
+			return this;
+		}
+
+		public JaxbTypeVerifier toVerifier() {
+			return new JaxbTypeVerifier(options);
+		}
+	}
+
+	private JaxbTypeVerifier(Options options) {
+		this.options = options;
+	}
+
+	public void verifyPackage(String packageName) throws IOException {
+		PackageScanner.scanPackage(packageName, new Visitor());
+	}
+}
