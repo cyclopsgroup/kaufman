@@ -28,6 +28,8 @@
     <modules>
         <module>kaufman-aws</module>
         <module>kaufman-tests</module>
+    	<module>kaufman-interfaces</module>
+        <module>kaufman-beans</module>
     </modules>
     <build>
         <pluginManagement>
