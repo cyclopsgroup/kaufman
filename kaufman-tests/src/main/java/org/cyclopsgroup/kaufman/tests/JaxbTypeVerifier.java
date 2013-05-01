@@ -21,6 +21,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import org.joda.time.DateTime;
+
 public class JaxbTypeVerifier
 {
     public static class Builder
@@ -77,14 +79,16 @@ public class JaxbTypeVerifier
             }
             if ( type.isEnum() )
             {
-                if ( !options.verifyEnum || !type.isAnnotationPresent( XmlEnum.class ) )
+                if ( !options.verifyEnum
+                    || !type.isAnnotationPresent( XmlEnum.class ) )
                 {
                     return;
                 }
                 verifyXmlEnum( (Class<? extends Enum>) type );
                 return;
             }
-            if ( type.isAnnotationPresent( XmlType.class ) || type.isAnnotationPresent( XmlRootElement.class ) )
+            if ( type.isAnnotationPresent( XmlType.class )
+                || type.isAnnotationPresent( XmlRootElement.class ) )
             {
 
                 if ( !options.verifyClass )
@@ -126,7 +130,8 @@ public class JaxbTypeVerifier
         {
             for ( PropertyDescriptor prop : Introspector.getBeanInfo( elementType ).getPropertyDescriptors() )
             {
-                if ( prop.getReadMethod() == null || prop.getName().equals( "class" )
+                if ( prop.getReadMethod() == null
+                    || prop.getName().equals( "class" )
                     || prop.getReadMethod().isAnnotationPresent( XmlTransient.class ) )
                 {
                     continue;
@@ -135,24 +140,35 @@ public class JaxbTypeVerifier
                     || prop.getReadMethod().isAnnotationPresent( XmlAttribute.class ) )
                 {
                     Method setter = prop.getWriteMethod();
-                    assertNotNull( "Property " + prop.getName() + " in " + elementType + " is missing setter", setter );
+                    assertNotNull( "Property " + prop.getName() + " in "
+                        + elementType + " is missing setter", setter );
 
-                    assertFalse( "Setter of " + prop.getName() + " is not supposed to be annotated in " + elementType,
+                    assertFalse( "Setter of " + prop.getName()
+                                     + " is not supposed to be annotated in "
+                                     + elementType,
                                  setter.isAnnotationPresent( XmlElement.class )
                                      || setter.isAnnotationPresent( XmlAttribute.class ) );
+                    if ( options.verifyDateTimeAdapter
+                        && prop.getPropertyType() == DateTime.class )
+                    {
 
+                    }
                     continue;
                 }
                 if ( options.requireTransient )
                 {
-                    fail( "Getter of " + prop.getName() + " in " + elementType
+                    fail( "Getter of "
+                        + prop.getName()
+                        + " in "
+                        + elementType
                         + " is not annotated with XmlTrasient, XmlElement or XmlAttribute" );
                 }
             }
         }
         catch ( IntrospectionException e )
         {
-            throw new IllegalStateException( "Can't introspect element " + elementType, e );
+            throw new IllegalStateException( "Can't introspect element "
+                + elementType, e );
         }
     }
 
@@ -167,14 +183,17 @@ public class JaxbTypeVerifier
             }
             catch ( NoSuchFieldException e )
             {
-                throw new IllegalStateException( "Can't get field " + enu.name() + " of enum " + enumType, e );
+                throw new IllegalStateException( "Can't get field "
+                    + enu.name() + " of enum " + enumType, e );
             }
             XmlEnumValue value = field.getAnnotation( XmlEnumValue.class );
-            assertNotNull( enumType + "." + enu.name() + " is not annotated with " + XmlEnumValue.class, value );
+            assertNotNull( enumType + "." + enu.name()
+                + " is not annotated with " + XmlEnumValue.class, value );
             if ( options.verifyEnumValue )
             {
                 assertEquals( "Enum " + enumType + "." + enu.name()
-                    + " is annotated with XmlEnumValue of wrong value() " + value.value(), enu.name(), value.value() );
+                    + " is annotated with XmlEnumValue of wrong value() "
+                    + value.value(), enu.name(), value.value() );
             }
         }
     }
