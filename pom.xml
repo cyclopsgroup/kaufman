@@ -30,6 +30,7 @@
         <module>kaufman-tests</module>
     	<module>kaufman-interfaces</module>
         <module>kaufman-beans</module>
+        <module>kaufman-web</module>
     </modules>
     <build>
         <pluginManagement>
