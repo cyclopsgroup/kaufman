@@ -6,30 +6,37 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.util.DigestUtils;
 
 public class DomainWhitelistingFilter
-    implements Filter
+    extends AbstractRequestAuthorizingFilter
 {
     private static final Log LOG =
         LogFactory.getLog( DomainWhitelistingFilter.class );
 
-    private Set<String> pathIgnored =
+    private final Set<String> buildinDomains =
         Collections.unmodifiableSet( new HashSet<String>(
-                                                          Arrays.asList( "/ping" ) ) );
+                                                          Arrays.asList( "127.0.0.1",
+                                                                         "localhost" ) ) );
 
-    private Set<String> whitelistedDomains = Collections.emptySet();
+    private Set<String> whiteDomainHashes = Collections.emptySet();
+
+    private Set<String> whiteDomainNames = Collections.emptySet();
+
+    /**
+     * @inheritDoc
+     */
+    @Override
+    public void destroy()
+    {
+    }
 
     /**
      * @inheritDoc
@@ -38,18 +45,28 @@ public class DomainWhitelistingFilter
     public void init( FilterConfig config )
         throws ServletException
     {
-        String param = config.getInitParameter( "whitelistedDomains" );
-        if ( StringUtils.isBlank( param ) )
+        String names = config.getInitParameter( "whiteDomainNames" );
+        if ( StringUtils.isNotBlank( names ) )
         {
-            LOG.info( "No configuraton is provided, only local access is accepted" );
-        }
-        else
-        {
-            whitelistedDomains =
+            whiteDomainNames =
                 Collections.unmodifiableSet( new HashSet<String>(
-                                                                  Arrays.asList( StringUtils.split( param,
+                                                                  Arrays.asList( StringUtils.split( names,
                                                                                                     ',' ) ) ) );
-            LOG.info( "These domains are accepted: " + whitelistedDomains );
+            LOG.info( "These domains are accepted: " + whiteDomainNames );
+        }
+
+        String hashes = config.getInitParameter( "whiteDomainHashes" );
+        if ( StringUtils.isNotBlank( hashes ) )
+        {
+            whiteDomainHashes =
+                Collections.unmodifiableSet( new HashSet<String>(
+                                                                  Arrays.asList( StringUtils.split( hashes,
+                                                                                                    ',' ) ) ) );
+            LOG.info( "These domain hashes are accepted: " + whiteDomainHashes );
+        }
+        if ( whiteDomainNames.isEmpty() && whiteDomainHashes.isEmpty() )
+        {
+            LOG.info( "No domain is configured, only local access to service is allowed" );
         }
     }
 
@@ -57,37 +74,15 @@ public class DomainWhitelistingFilter
      * @inheritDoc
      */
     @Override
-    public void doFilter( ServletRequest request, ServletResponse response,
-                          FilterChain chain )
-        throws IOException, ServletException
+    protected boolean isRequestAuthorized( HttpServletRequest request )
+        throws ServletException, IOException
     {
-        HttpServletRequest req = (HttpServletRequest) request;
-        String path =
-            StringUtils.stripToEmpty( req.getServletPath() )
-                + StringUtils.stripToEmpty( req.getPathInfo() );
-        if ( pathIgnored.contains( path ) )
-        {
-            chain.doFilter( request, response );
-            return;
-        }
-
         String serverName = request.getServerName();
-        if ( !serverName.equalsIgnoreCase( "localhost" )
-            && !whitelistedDomains.contains( serverName ) )
+        if ( buildinDomains.contains( serverName )
+            || whiteDomainNames.contains( serverName ) )
         {
-            ( (HttpServletResponse) response ).sendError( HttpServletResponse.SC_UNAUTHORIZED,
-                                                          "Unauthorized access against server domain "
-                                                              + serverName );
-            return;
+            return true;
         }
-        chain.doFilter( request, response );
-    }
-
-    /**
-     * @inheritDoc
-     */
-    @Override
-    public void destroy()
-    {
+        return whiteDomainHashes.contains( DigestUtils.md5DigestAsHex( serverName.getBytes() ) );
     }
 }
