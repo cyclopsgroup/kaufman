@@ -10,6 +10,10 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+/**
+ * A Java class that creates proxy around arbitrary interface and logs input,
+ * output of invocation of every method call
+ */
 public class InvocationLoggingDecorator
 {
     private static class Handler<T>
@@ -81,6 +85,14 @@ public class InvocationLoggingDecorator
         }
     }
 
+    /**
+     * Create proxy of given interface around given implementation
+     *
+     * @param <T> Type of interface to create proxy for
+     * @param interfaceType Type of interface to create proxy for
+     * @param target Invocation target, the implementation of interface
+     * @return Proxy of interface
+     */
     public static <T> T decorate( Class<T> interfaceType, T target )
     {
         return interfaceType.cast( Proxy.newProxyInstance( InvocationLoggingDecorator.class.getClassLoader(),

@@ -15,6 +15,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.util.DigestUtils;
 
+/**
+ * An HTTP filter that only allows request for a whitelist of domains
+ */
 public class DomainWhitelistingFilter
     extends AbstractRequestAuthorizingFilter
 {
@@ -45,6 +48,7 @@ public class DomainWhitelistingFilter
     public void init( FilterConfig config )
         throws ServletException
     {
+        // whiteDomainNames parameter defines a whitelist of domains
         String names = config.getInitParameter( "whiteDomainNames" );
         if ( StringUtils.isNotBlank( names ) )
         {
@@ -55,6 +59,9 @@ public class DomainWhitelistingFilter
             LOG.info( "These domains are accepted: " + whiteDomainNames );
         }
 
+        // whiteDomainHashes parameter defines a shilwlist of domain hashs
+        // This allows developer not to write down actual domain in servlet
+        // configuration file
         String hashes = config.getInitParameter( "whiteDomainHashes" );
         if ( StringUtils.isNotBlank( hashes ) )
         {
@@ -78,11 +85,15 @@ public class DomainWhitelistingFilter
         throws ServletException, IOException
     {
         String serverName = request.getServerName();
+
+        // Accept request if domain name is whitelisted
         if ( buildinDomains.contains( serverName )
             || whiteDomainNames.contains( serverName ) )
         {
             return true;
         }
+
+        // Accept request if domain name hash is whitelisted
         return whiteDomainHashes.contains( DigestUtils.md5DigestAsHex( serverName.getBytes() ) );
     }
 }

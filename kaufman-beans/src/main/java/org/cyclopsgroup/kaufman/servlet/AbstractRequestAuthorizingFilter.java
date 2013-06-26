@@ -16,6 +16,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
+/**
+ * A base abstract HTTP filter that verifies request before passing it to next
+ * step of chain
+ */
 public abstract class AbstractRequestAuthorizingFilter
     implements Filter
 {
@@ -32,6 +36,8 @@ public abstract class AbstractRequestAuthorizingFilter
         throws IOException, ServletException
     {
         HttpServletRequest req = (HttpServletRequest) request;
+
+        // For a list of path, filter does not apply
         String path =
             StringUtils.stripToEmpty( req.getServletPath() )
                 + StringUtils.stripToEmpty( req.getPathInfo() );
@@ -41,6 +47,7 @@ public abstract class AbstractRequestAuthorizingFilter
             return;
         }
 
+        // Reject request if it's not authorized
         if ( !isRequestAuthorized( (HttpServletRequest) request ) )
         {
             ( (HttpServletResponse) response ).sendError( HttpServletResponse.SC_UNAUTHORIZED,

@@ -7,6 +7,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
 
+/**
+ * AspectJ advice that logs input and output of method invocation
+ */
 public class InvocationLoggingAdvice
 {
     public Object execute( ProceedingJoinPoint point )
