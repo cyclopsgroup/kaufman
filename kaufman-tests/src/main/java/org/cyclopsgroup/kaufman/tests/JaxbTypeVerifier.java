@@ -15,6 +15,7 @@ import java.util.EnumSet;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElements;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -137,7 +138,8 @@ public class JaxbTypeVerifier
                     continue;
                 }
                 if ( prop.getReadMethod().isAnnotationPresent( XmlElement.class )
-                    || prop.getReadMethod().isAnnotationPresent( XmlAttribute.class ) )
+                    || prop.getReadMethod().isAnnotationPresent( XmlAttribute.class )
+                    || prop.getReadMethod().isAnnotationPresent( XmlElements.class ) )
                 {
                     Method setter = prop.getWriteMethod();
                     assertNotNull( "Property " + prop.getName() + " in "
