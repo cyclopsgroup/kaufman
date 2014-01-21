@@ -11,7 +11,7 @@
     <packaging>pom</packaging>
     <name>Kaufman</name>
     <description>Shared utilities for other CyclopsGroup projects</description>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
     <inceptionYear>2012</inceptionYear>
     <scm>
         <connection>scm:git:git@github.com:jiaqi/kaufman.git</connection>
