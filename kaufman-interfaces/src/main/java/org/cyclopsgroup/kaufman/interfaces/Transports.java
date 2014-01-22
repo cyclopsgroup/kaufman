@@ -35,8 +35,7 @@ public final class Transports
                                                      + destinationType + ": "
                                                      + e.getMessage(), e );
             }
-            source.exportTo( dest );
-            destination.add( dest );
+            destination.add( source.exportTo( dest ) );
         }
         return destination;
     }
