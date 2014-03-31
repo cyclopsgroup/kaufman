@@ -1,6 +1,6 @@
 /**
  * Validate form with AJAX against predefined servlet in service
- *
+ * 
  * @param form
  *            Form to validate
  * @returns True if validation passes
@@ -12,7 +12,7 @@ function validateForm(form) {
 		alert("Input with name 'formBean' must exist to validate form!");
 		return false;
 	}
-	$(form).parent().find(".error").html("");
+	$(form).parent().find(".error").html("").css("display", "none");
 	$(form).find(":input").removeClass("malformed");
 	$(form).find(":button").attr("disabled", "disabled");
 
@@ -49,11 +49,13 @@ function validateFormWithResult(form, data) {
 		}
 		$(form).find(":input[name='" + field.fieldName + "']").addClass(
 				"malformed");
-		$(form).parent().find(".error").each(function() {
-			if ($(this).attr("u:for") == field.fieldName) {
-				$(this).html(field.failureMessages.join());
-			}
-		});
+		$(form).parent().find(".error").each(
+				function() {
+					if ($(this).attr("u:for") == field.fieldName) {
+						$(this).html(field.failureMessages.join()).css(
+								"display", "block");
+					}
+				});
 	}
 	$(form).find(":button").removeAttr("disabled");
 	return false;
