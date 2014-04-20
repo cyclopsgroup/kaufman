@@ -23,12 +23,17 @@ public class WebLinkTool
     public LinkTool absolute( String uri )
     {
         boolean external = false;
+        String path = uri;
+        if ( !path.startsWith( "/" ) )
+        {
+            path = "/" + path;
+        }
         for ( Pattern p : config.getExternalResourcePatterns() )
         {
-            if ( p.matcher( uri ).find() )
+            if ( p.matcher( path ).find() )
             {
                 external = true;
-                externalResourcePath = uri;
+                externalResourcePath = path;
                 break;
             }
         }
