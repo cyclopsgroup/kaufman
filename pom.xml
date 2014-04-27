@@ -5,13 +5,13 @@
     <parent>
         <groupId>org.cyclopsgroup</groupId>
         <artifactId>cyclopsgroup-java-parent</artifactId>
-        <version>0.4</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>kaufman</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Kaufman</name>
     <description>Shared utilities for other CyclopsGroup projects</description>
-    <version>0.0.2-SNAPSHOT</version>
     <inceptionYear>2012</inceptionYear>
     <scm>
         <connection>scm:git:git@github.com:jiaqi/kaufman.git</connection>
@@ -20,20 +20,12 @@
     </scm>
     <distributionManagement>
         <site>
-            <id>cyclopsgroup.server.sourceforge</id>
+            <id>cyclopsgroup.server</id>
             <url>
-                s3://www.cyclopsgroup.org/projects/kaufman
+                s3://www2.cyclopsgroup.org/projects/kaufman
             </url>
         </site>
     </distributionManagement>
-    <developers>
-        <developer>
-            <id>jiaqi</id>
-            <email>jiaqi@cyclopsgroup.org</email>
-            <name>Jiaqi Guo</name>
-            <url>http://www.cyclopsgroup.org/members/jiaqi</url>
-        </developer>
-    </developers>
     <modules>
         <module>kaufman-aws</module>
         <module>kaufman-tests</module>
@@ -41,46 +33,6 @@
         <module>kaufman-beans</module>
         <module>kaufman-web</module>
     </modules>
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.eclipse.m2e</groupId>
-                    <artifactId>lifecycle-mapping</artifactId>
-                    <version>1.0.0</version>
-                    <configuration>
-                        <lifecycleMappingMetadata>
-                            <pluginExecutions>
-                                <pluginExecution>
-                                    <pluginExecutionFilter>
-                                        <groupId>org.apache.maven.plugins</groupId>
-                                        <artifactId>maven-enforcer-plugin</artifactId>
-                                        <versionRange>[1.0.0,)</versionRange>
-                                        <goals>
-                                            <goal>enforce</goal>
-                                        </goals>
-                                    </pluginExecutionFilter>
-                                    <action>
-                                        <ignore />
-                                    </action>
-                                </pluginExecution>
-                            </pluginExecutions>
-                        </lifecycleMappingMetadata>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.4</version>
-                <configuration>
-                    <keyName>cyclopsgroup-repository</keyName>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
     <properties>
         <org.springframework.version>3.2.0.RELEASE</org.springframework.version>
     </properties>
