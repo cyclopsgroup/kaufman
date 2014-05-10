@@ -36,6 +36,11 @@ public class DomainRedirectionFilter
                           FilterChain chain )
         throws IOException, ServletException
     {
+        if ( ServletUtils.isBot( request ) )
+        {
+            chain.doFilter( request, response );
+            return;
+        }
         HttpServletRequest req = (HttpServletRequest) request;
         if ( !req.getMethod().equalsIgnoreCase( "get" ) )
         {
@@ -60,7 +65,8 @@ public class DomainRedirectionFilter
 
         String redirectUrl =
             baseUrl + StringUtils.removeStart( requestedUrl, requestedBase );
-        LOG.info( "Redirecting request to new location: " + redirectUrl );
+        LOG.info( "Redirecting request from " + requestedUrl
+            + " to new location: " + redirectUrl );
         ( (HttpServletResponse) response ).sendRedirect( redirectUrl );
     }
 
