@@ -75,7 +75,7 @@ public class S3FileFactoryBean
         {
             localFile =
                 File.createTempFile( S3FileFactoryBean.class.getSimpleName(),
-                                     "" );
+                                     ".tmp" );
             LOG.info( "Using default local file " + localFile );
         }
         LOG.info( String.format( "Getting object %s:%s into local file %s",
