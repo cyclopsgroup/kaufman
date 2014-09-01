@@ -22,6 +22,9 @@ public class MappedFactoryBean<T>
         this.key = key;
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public T getObject()
     {
@@ -39,12 +42,18 @@ public class MappedFactoryBean<T>
             + map.keySet() );
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public Class<?> getObjectType()
     {
         return Object.class;
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public boolean isSingleton()
     {
