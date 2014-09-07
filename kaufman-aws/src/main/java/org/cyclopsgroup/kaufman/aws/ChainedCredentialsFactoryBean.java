@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,6 +29,24 @@ public class ChainedCredentialsFactoryBean
 {
     private static final Log LOG =
         LogFactory.getLog( ChainedCredentialsFactoryBean.class );
+
+    private static String populateSystemProperties( String input )
+    {
+        String result = input;
+        for ( Map.Entry<Object, Object> entry : System.getProperties().entrySet() )
+        {
+            if ( !input.contains( "${" ) )
+            {
+                break;
+            }
+            String placeholder =
+                "\\$\\{" + entry.getKey().toString().replaceAll( "\\.", "\\." )
+                    + "\\}";
+            result =
+                result.replaceAll( placeholder, entry.getValue().toString() );
+        }
+        return result;
+    }
 
     private final List<Object> chain;
 
@@ -64,7 +83,9 @@ public class ChainedCredentialsFactoryBean
                 File file;
                 if ( initObject instanceof String )
                 {
-                    file = new File( (String) initObject );
+                    file =
+                        new File(
+                                  populateSystemProperties( ( (String) initObject ).trim() ) );
                 }
                 else
                 {
@@ -75,6 +96,7 @@ public class ChainedCredentialsFactoryBean
                     LOG.info( "Skip file " + file + " since it does't exist" );
                     continue;
                 }
+                LOG.info( "Return credentials in file " + file );
                 return new StaticCredentialsProvider(
                                                       new PropertiesCredentials(
                                                                                  file ) );
