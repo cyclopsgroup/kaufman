@@ -21,11 +21,17 @@ import com.amazonaws.services.dynamodb.model.QueryResult;
 
 public class DynamoDBPropertiesBuilderTest
 {
-    private Mockery mock;
+    private DynamoDBPropertiesBuilder builder;
 
     private AmazonDynamoDB dynamo;
 
-    private DynamoDBPropertiesBuilder builder;
+    private Mockery mock;
+
+    @After
+    public void assertMocks()
+    {
+        mock.assertIsSatisfied();
+    }
 
     @Before
     public void setUpMocks()
@@ -33,12 +39,6 @@ public class DynamoDBPropertiesBuilderTest
         mock = new Mockery();
         dynamo = mock.mock( AmazonDynamoDB.class );
         builder = new DynamoDBPropertiesBuilder().withDynamo( dynamo ).withTableName( "test-table" );
-    }
-
-    @After
-    public void assertMocks()
-    {
-        mock.assertIsSatisfied();
     }
 
     @Test
