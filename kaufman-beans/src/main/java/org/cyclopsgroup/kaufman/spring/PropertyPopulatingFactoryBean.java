@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.collections.ExtendedProperties;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
+import org.cyclopsgroup.kaufman.PropertiesHierarchyUtils;
 import org.springframework.beans.factory.FactoryBean;
 
 public class PropertyPopulatingFactoryBean<T>
@@ -38,11 +38,11 @@ public class PropertyPopulatingFactoryBean<T>
         Map<String, String> props = new HashMap<String, String>();
         if ( StringUtils.isNotEmpty( prefix ) )
         {
-            ExtendedProperties ep =
-                ExtendedProperties.convertProperties( properties ).subset( prefix );
-            for ( Object key : ep.keySet() )
+            Properties subProps =
+                PropertiesHierarchyUtils.subset( properties, prefix );
+            for ( Object key : subProps.keySet() )
             {
-                props.put( key.toString(), ep.getString( key.toString() ) );
+                props.put( key.toString(), subProps.getProperty( key.toString() ) );
             }
         }
         else

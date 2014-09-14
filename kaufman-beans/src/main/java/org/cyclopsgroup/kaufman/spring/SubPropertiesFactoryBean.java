@@ -5,6 +5,7 @@ import java.util.Properties;
 import org.apache.commons.collections.ExtendedProperties;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
+import org.cyclopsgroup.kaufman.PropertiesHierarchyUtils;
 import org.springframework.beans.factory.FactoryBean;
 
 public class SubPropertiesFactoryBean
@@ -42,8 +43,7 @@ public class SubPropertiesFactoryBean
     @Override
     public Properties getObject()
     {
-        ExtendedProperties ep =
-            ExtendedProperties.convertProperties( source ).subset( prefix );
+        Properties ep = PropertiesHierarchyUtils.subset( source, prefix );
         Properties props = new Properties();
         for ( Object key : ep.keySet() )
         {
@@ -56,7 +56,7 @@ public class SubPropertiesFactoryBean
             {
                 newKey = newKey + "." + suffixAppended;
             }
-            props.setProperty( newKey, ep.getString( key.toString() ) );
+            props.setProperty( newKey, ep.getProperty( key.toString() ) );
         }
         return props;
     }
