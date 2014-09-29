@@ -28,9 +28,9 @@ public abstract class LocateableResource
         public LocateableResource locate( String relativePath )
         {
             String parentPath = file.getParentFile().getAbsolutePath();
-            if ( !parentPath.endsWith( SystemUtils.PATH_SEPARATOR ) )
+            if ( !parentPath.endsWith( SystemUtils.FILE_SEPARATOR ) )
             {
-                parentPath += SystemUtils.PATH_SEPARATOR;
+                parentPath += SystemUtils.FILE_SEPARATOR;
             }
             return new FileResource( new File( parentPath + relativePath ) );
         }
