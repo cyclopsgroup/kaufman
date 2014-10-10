@@ -22,16 +22,14 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 /**
- * This servlet validates request with {@link Validator} from spring context and
- * return a JSON pojo for validation results. It is called by Javascript in
- * order validate form with AJAX before submitting the form.
+ * This servlet validates request with {@link Validator} from spring context and return a JSON pojo for validation
+ * results. It is called by Javascript in order validate form with AJAX before submitting the form.
  */
 @SuppressWarnings( "serial" )
 public class FormValidationServlet
     extends HttpServlet
 {
-    private static final Log LOG =
-        LogFactory.getLog( FormValidationServlet.class );
+    private static final Log LOG = LogFactory.getLog( FormValidationServlet.class );
 
     private static Object newInstance( String typeName )
         throws ServletException
@@ -51,8 +49,7 @@ public class FormValidationServlet
     {
         FormValidationResult result = new FormValidationResult();
 
-        Map<String, FieldValidationResult> fieldMap =
-            new HashMap<String, FieldValidationResult>();
+        Map<String, FieldValidationResult> fieldMap = new HashMap<String, FieldValidationResult>();
         for ( FieldError f : from.getFieldErrors() )
         {
             FieldValidationResult fr = fieldMap.get( f.getField() );
@@ -80,8 +77,7 @@ public class FormValidationServlet
             fieldMap.put( fr.getFieldName(), fr );
         }
 
-        result.setFields( new ArrayList<FieldValidationResult>(
-                                                                fieldMap.values() ) );
+        result.setFields( new ArrayList<FieldValidationResult>( fieldMap.values() ) );
         result.setSuccessful( result.getFields().isEmpty() );
         return result;
     }
@@ -96,8 +92,7 @@ public class FormValidationServlet
         validateForm( req, resp );
     }
 
-    private void validateForm( HttpServletRequest request,
-                               HttpServletResponse response )
+    private void validateForm( HttpServletRequest request, HttpServletResponse response )
         throws ServletException, IOException
     {
         String formBeanType = request.getParameter( "formBean" );
@@ -107,13 +102,11 @@ public class FormValidationServlet
         }
 
         Object formBean = newInstance( formBeanType );
-        LOG.info( "Validating form "
-            + ToStringBuilder.reflectionToString( formBean ) );
 
-        ServletRequestDataBinder binder =
-            new ServletRequestDataBinder( formBean );
+        ServletRequestDataBinder binder = new ServletRequestDataBinder( formBean );
         binder.setValidator( WebApplicationContextUtils.getRequiredWebApplicationContext( getServletContext() ).getBean( Validator.class ) );
         binder.bind( request );
+        LOG.info( "Validating form " + ToStringBuilder.reflectionToString( formBean ) );
         binder.validate();
 
         FormValidationResult result = buildResult( binder.getBindingResult() );
