@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -173,6 +174,10 @@ public class DomainRedirectionFilter
             baseUrl + requestedUrl.substring( requestBase.length() );
         LOG.info( "Redirecting request from " + requestedUrl
             + " to new location: " + redirectUrl );
+        if ( StringUtils.isNotBlank( req.getQueryString() ) )
+        {
+            redirectUrl += ( "?" + req.getQueryString() );
+        }
         ( (HttpServletResponse) response ).sendRedirect( redirectUrl );
     }
 
