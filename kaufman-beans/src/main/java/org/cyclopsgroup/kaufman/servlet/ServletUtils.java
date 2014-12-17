@@ -14,6 +14,7 @@ public class ServletUtils
         Collections.unmodifiableSet( new HashSet<String>(
                                                           Arrays.asList( "googlebot",
                                                                          "msnbot",
+                                                                         "bingbot",
                                                                          "baiduspider",
                                                                          "elb-healthchecker",
                                                                          "zmeu",
