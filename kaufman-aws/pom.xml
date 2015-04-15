@@ -15,7 +15,12 @@
     <dependencies>
         <dependency>
             <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk</artifactId>
+            <artifactId>aws-java-sdk-core</artifactId>
+            <version>${aws.sdk.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
             <version>${aws.sdk.version}</version>
         </dependency>
         <dependency>
@@ -37,6 +42,6 @@
         </dependency>
     </dependencies>
     <properties>
-        <aws.sdk.version>1.7.3</aws.sdk.version>
+        <aws.sdk.version>1.9.30</aws.sdk.version>
     </properties>
 </project>
