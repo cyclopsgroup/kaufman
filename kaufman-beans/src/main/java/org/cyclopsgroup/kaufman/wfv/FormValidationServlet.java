@@ -13,13 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.context.support.WebApplicationContextUtils;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * This servlet validates request with {@link Validator} from spring context and return a JSON pojo for validation
@@ -100,7 +101,6 @@ public class FormValidationServlet
         {
             throw new ServletException( "formBean must be specified" );
         }
-
         Object formBean = newInstance( formBeanType );
 
         ServletRequestDataBinder binder = new ServletRequestDataBinder( formBean );
