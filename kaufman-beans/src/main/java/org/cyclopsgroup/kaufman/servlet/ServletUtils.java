@@ -11,17 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 public class ServletUtils
 {
     private static final Set<String> USER_AGENT_BOT_KEYWORDS =
-        Collections.unmodifiableSet( new HashSet<String>(
-                                                          Arrays.asList( "googlebot",
-                                                                         "msnbot",
-                                                                         "bingbot",
-                                                                         "baiduspider",
-                                                                         "elb-healthchecker",
-                                                                         "zmeu",
-                                                                         "python-urllib",
-                                                                         "c4.sh",
-                                                                         "massscan",
-                                                                         "mediapartners" ) ) );
+        Collections.unmodifiableSet( new HashSet<String>( Arrays.asList( "googlebot", "msnbot", "bingbot",
+                                                                         "baiduspider", "elb-healthchecker", "zmeu",
+                                                                         "python-urllib", "c4.sh", "massscan",
+                                                                         "mediapartners", "mj12bot" ) ) );
 
     public static boolean isBot( ServletRequest request )
     {
