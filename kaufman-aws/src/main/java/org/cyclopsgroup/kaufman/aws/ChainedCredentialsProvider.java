@@ -69,9 +69,6 @@ public class ChainedCredentialsProvider
                                              + chain );
     }
 
-    /**
-     * @inheritDoc
-     */
     @Override
     public AWSCredentials getCredentials()
     {
@@ -83,9 +80,6 @@ public class ChainedCredentialsProvider
         return instance;
     }
 
-    /**
-     * @inheritDoc
-     */
     @Override
     public void refresh()
     {
