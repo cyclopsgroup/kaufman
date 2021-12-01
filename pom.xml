@@ -14,9 +14,9 @@
     <description>Shared utilities for other CyclopsGroup projects</description>
     <inceptionYear>2012</inceptionYear>
     <scm>
-        <connection>scm:git:git@github.com:jiaqi/kaufman.git</connection>
-        <developerConnection>scm:git:git@github.com:jiaqi/kaufman.git</developerConnection>
-        <url>git@github.com:jiaqi/kaufman.git</url>
+        <connection>scm:git:git@github.com:cyclopsgroup/kaufman.git</connection>
+        <developerConnection>scm:git:git@github.com:cyclopsgroup/kaufman.git</developerConnection>
+        <url>git@github.com:cyclopsgroup/kaufman.git</url>
     </scm>
     <distributionManagement>
         <site>
