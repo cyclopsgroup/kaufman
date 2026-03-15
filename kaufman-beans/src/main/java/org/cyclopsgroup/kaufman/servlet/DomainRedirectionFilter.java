@@ -51,7 +51,9 @@ public class DomainRedirectionFilter implements Filter {
       this.forwarded = changed;
     }
 
-    /** @inheritDoc */
+    /**
+     * @inheritDoc
+     */
     @Override
     public StringBuffer getRequestURL() {
       if (!forwarded) {
@@ -67,13 +69,17 @@ public class DomainRedirectionFilter implements Filter {
       return super.getRequestURL();
     }
 
-    /** @inheritDoc */
+    /**
+     * @inheritDoc
+     */
     @Override
     public String getScheme() {
       return scheme;
     }
 
-    /** @inheritDoc */
+    /**
+     * @inheritDoc
+     */
     @Override
     public int getServerPort() {
       return serverPort;
@@ -84,7 +90,9 @@ public class DomainRedirectionFilter implements Filter {
 
   private String baseUrl;
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   public void destroy() {}
 
@@ -97,7 +105,9 @@ public class DomainRedirectionFilter implements Filter {
     return url.toString();
   }
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {

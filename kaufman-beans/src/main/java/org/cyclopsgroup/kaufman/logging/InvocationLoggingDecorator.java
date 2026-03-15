@@ -24,7 +24,9 @@ public class InvocationLoggingDecorator {
       this.target = target;
     }
 
-    /** @inheritDoc */
+    /**
+     * @inheritDoc
+     */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
       if (method.getDeclaringClass() == Object.class) {

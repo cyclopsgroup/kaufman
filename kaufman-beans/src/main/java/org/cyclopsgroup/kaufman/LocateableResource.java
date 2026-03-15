@@ -16,7 +16,9 @@ public abstract class LocateableResource {
       this.file = file;
     }
 
-    /** @inheritDoc */
+    /**
+     * @inheritDoc
+     */
     @Override
     public LocateableResource locate(String relativePath) {
       String parentPath = file.getParentFile().getAbsolutePath();
@@ -26,13 +28,17 @@ public abstract class LocateableResource {
       return new FileResource(new File(parentPath + relativePath));
     }
 
-    /** @inheritDoc */
+    /**
+     * @inheritDoc
+     */
     @Override
     public InputStream openToRead() throws IOException {
       return new FileInputStream(file);
     }
 
-    /** @inheritDoc */
+    /**
+     * @inheritDoc
+     */
     @Override
     public String toString() {
       return "file://" + file;

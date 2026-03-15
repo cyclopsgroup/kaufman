@@ -24,7 +24,9 @@ public class PropertyPopulatingFactoryBean<T> implements FactoryBean<T> {
     this.properties = properties;
   }
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   public T getObject() throws InvocationTargetException, IllegalAccessException {
     Map<String, String> props = new HashMap<String, String>();
@@ -42,13 +44,17 @@ public class PropertyPopulatingFactoryBean<T> implements FactoryBean<T> {
     return bean;
   }
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   public Class<?> getObjectType() {
     return bean.getClass();
   }
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   public boolean isSingleton() {
     return true;

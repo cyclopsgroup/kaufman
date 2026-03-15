@@ -15,13 +15,17 @@ public class JodaDateTimeAdapter extends XmlAdapter<String, DateTime> {
 
   private static final DateTimeFormatter PARSER = ISODateTimeFormat.dateTimeParser();
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   public String marshal(DateTime v) throws Exception {
     return FORMAT.print(v);
   }
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   public DateTime unmarshal(String v) throws Exception {
     return PARSER.parseDateTime(v);

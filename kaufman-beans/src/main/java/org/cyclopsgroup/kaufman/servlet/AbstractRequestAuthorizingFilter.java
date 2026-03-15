@@ -19,7 +19,9 @@ public abstract class AbstractRequestAuthorizingFilter implements Filter {
   private Set<String> pathIgnored =
       Collections.unmodifiableSet(new HashSet<String>(Arrays.asList("/ping")));
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
