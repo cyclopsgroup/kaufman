@@ -18,7 +18,9 @@ public class MappedFactoryBean<T> implements FactoryBean<T> {
     this.key = key;
   }
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   public T getObject() {
     T value = map.get(key);
@@ -32,13 +34,17 @@ public class MappedFactoryBean<T> implements FactoryBean<T> {
         "Key " + key + " is not mapped to any value, these are valid keys: " + map.keySet());
   }
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   public Class<?> getObjectType() {
     return Object.class;
   }
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   public boolean isSingleton() {
     return true;

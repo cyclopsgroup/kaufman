@@ -31,7 +31,9 @@ public class FormValidationResult {
     this.successful = successful;
   }
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   public String toString() {
     return ToStringBuilder.reflectionToString(this);

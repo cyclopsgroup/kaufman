@@ -31,7 +31,9 @@ public class SubPropertiesFactoryBean implements FactoryBean<Properties> {
     this.prefix = prefix;
   }
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   public Properties getObject() {
     Properties ep = PropertiesHierarchyUtils.subset(source, prefix);
@@ -49,13 +51,17 @@ public class SubPropertiesFactoryBean implements FactoryBean<Properties> {
     return props;
   }
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   public Class<?> getObjectType() {
     return Properties.class;
   }
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   public boolean isSingleton() {
     return true;

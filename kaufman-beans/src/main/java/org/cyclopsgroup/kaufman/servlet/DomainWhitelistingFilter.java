@@ -24,11 +24,15 @@ public class DomainWhitelistingFilter extends AbstractRequestAuthorizingFilter {
 
   private Set<String> whiteDomainNames = Collections.emptySet();
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   public void destroy() {}
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   public void init(FilterConfig config) throws ServletException {
     // whiteDomainNames parameter defines a whitelist of domains
@@ -55,7 +59,9 @@ public class DomainWhitelistingFilter extends AbstractRequestAuthorizingFilter {
     }
   }
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   protected boolean isRequestAuthorized(HttpServletRequest request)
       throws ServletException, IOException {

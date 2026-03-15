@@ -18,7 +18,9 @@ public class StringFormattingFactoryBean implements FactoryBean<String> {
     this.format = format;
   }
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   public String getObject() {
     Object[] params;
@@ -33,13 +35,17 @@ public class StringFormattingFactoryBean implements FactoryBean<String> {
     return result;
   }
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   public Class<String> getObjectType() {
     return String.class;
   }
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   public boolean isSingleton() {
     return true;

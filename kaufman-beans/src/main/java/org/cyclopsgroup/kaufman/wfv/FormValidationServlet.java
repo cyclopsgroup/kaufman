@@ -68,7 +68,9 @@ public class FormValidationServlet extends HttpServlet {
     return result;
   }
 
-  /** @inheritDoc */
+  /**
+   * @inheritDoc
+   */
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp)
       throws ServletException, IOException {
